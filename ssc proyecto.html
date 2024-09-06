@@ -33,7 +33,6 @@
     </table>
 </center>
 <script>
-  // Function to save the table data to local storage
   function saveTableData() {
       const tableData = [];
       const rows = document.getElementById("tabla").rows;
@@ -47,42 +46,34 @@
       }
       localStorage.setItem("tableData", JSON.stringify(tableData));
   }
-
-  // Function to load the table data from local storage
-  function loadTableData() {
-      const   
-savedData = localStorage.getItem("tableData");
-      if (savedData) {
-          const   
-tableData = JSON.parse(savedData);
-          const table = document.getElementById("tabla");
-          tableData.forEach(data => {
-              const newRow = table.insertRow(-1);
-              newRow.insertCell(0).textContent = data.elemento;
-              newRow.insertCell(1).textContent = data.descripcion;
-              newRow.insertCell(2).innerHTML = '<button onclick="eliminarFila(this)">Eliminar</button>';
-          });
-      }
+  function loadTableData (){
+    const savedData = localStorage.getItem("tableData");
+    if (savedData){
+        const tableData = JSON.parse (savedData);
+        const table = document.getElementById("tabla");
+        const addedValues = [];
+    }
   }
-
-  // Function to add a new row to the table and save the data
+ 
   function agregarFila() {
       const nombre = document.getElementById("captura").value;
-      const table = document.getElementById("tabla");
+    const nombreSinEspacios = nombre.trim();
+    if (nombreSinEspacios ===""){
+        alert("ingresa un valor valido");
+        return;x
+    }
+  const table = document.getElementById("tabla");
       const newRow = table.insertRow(-1);
       newRow.insertCell(0).textContent = table.rows.length - 1;
       newRow.insertCell(1).textContent = nombre;
       newRow.insertCell(2).innerHTML = '<button onclick="eliminarFila(this)">Eliminar</button>';
       saveTableData();
-  }
-
-  // Function to delete a row from the table and update local storage
+      document.getElementById("captura").value="";
+}
   function eliminarFila(button) {
       button.parentNode.parentNode.remove();
       saveTableData();
   }
-
-  // Load the table data from local storage on page load
   loadTableData();
 </script>
   </body>
