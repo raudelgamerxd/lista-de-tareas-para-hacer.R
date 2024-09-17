@@ -6,75 +6,113 @@
 
 <style type="text/css">
  table, tr, td {
-	border: 1px solid black;
+  border: 1px solid black;
 }
 
 </style> 
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title> HTML </title>
+</head>
+
+<style type="text/css">
+    table, tr, td {
+        border: 1px solid black;
+    }
+</style>
+
 <body>
-<div style="display: flex; justify-content: center;align-items: center;"
-<table>
-<tr>
-<td colspan="2"   style="background-color: white"><h2>Elementos de HTML</h2></td>
-</tr>
-<tr><td><input id="captura" type="text" placeholder="Escribe tu nombre"></td><td><input type="button" value="Agregar" onclick="agregarFila()" ></td></tr>
-</table>
-</div>
-<center>
-  <table id="tabla">
-    <tr>
-    <td   style="background-color: white ">Elementos</td>
-    <td   style="background-color: white ">Descripcion</td>
-    </tr>
-    <tr>
-      <td   style="background-color: white">Prueba</td>
-      <td id="ejemplo"  style="background-color: white">aqui ira otro texto.</td>
-    </tr>
-    </table>
-</center>
-<script>
-  function saveTableData() {
-      const tableData = [];
-      const rows = document.getElementById("tabla").rows;
-      for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          const data = {
-              elemento: row.cells[0].textContent,
-              descripcion: row.cells[1].textContent
-          };
-          tableData.push(data);
-      }
-      localStorage.setItem("tableData", JSON.stringify(tableData));
-  }
-  function loadTableData (){
-    const savedData = localStorage.getItem("tableData");
-    if (savedData){
-        const tableData = JSON.parse (savedData);
-        const table = document.getElementById("tabla");
-        const addedValues = [];
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <table>
+            <tr>
+                <td colspan="2" style="background-color: white"><h2>Elementos de HTML</h2></td>
+            </tr>
+            <tr>
+                <td><input id="captura" type="text" placeholder="Escribe tu nombre"></td>
+                <td><input type="button" value="Agregar" onclick="agregarFila()"></td>
+            </tr>
+        </table>
+    </div>
+
+    <center>
+        <table id="tabla">
+            <tr>
+                <td style="background-color: white">Elementos</td>
+                <td style="background-color: white">Descripción</td>
+            </tr>
+            <tr>
+                <td style="background-color: white">Prueba</td>
+                <td id="ejemplo" style="background-color: white">aquí ira otro texto.</td>
+            </tr>
+        </table>
+    </center>
+
+    <script>
+        function saveTableData() {
+            const tableData = [];
+            const rows = document.getElementById("tabla").rows;
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const data = {
+                    elemento: row.cells[0].textContent,
+                    descripcion: row.cells[1].textContent
+                };
+                tableData.push(data);
+            }
+            localStorage.setItem("tableData", JSON.stringify(tableData));
+        }
+
+        function loadTableData() {
+            const savedData = localStorage.getItem("tableData");
+            if (savedData) {
+                const tableData = JSON.parse(savedData);
+                const tableBody = document.getElementById("tabla").querySelector('tbody'); 
+
+               
+                tableBody.innerHTML = '';
+
+                
+                tableData.forEach(data => {
+                    const newRow = tableBody.insertRow();
+                    const cell1 = newRow.insertCell();
+                    const cell2 = newRow.insertCell();
+                    cell1.textContent = data.elemento;
+                    cell2.textContent = data.descripcion;
+                });
+            }
+        }
+
+        function agregarFila() {
+            
+            const nombre = document.getElementById("captura").value;
+      const nombreSinEspacios = nombre.trim();
+
+   
+    if (nombreSinEspacios === "") {
+        
+        alert("Por favor, ingresa un valor válido.");
+        return;
     }
-  }
- 
-  function agregarFila() {
-      const nombre = document.getElementById("captura").value;
-    const nombreSinEspacios = nombre.trim();
-    if (nombreSinEspacios ===""){
-        alert("ingresa un valor valido");
-        return;x
-    }
-  const table = document.getElementById("tabla");
+      const table = document.getElementById("tabla");
       const newRow = table.insertRow(-1);
       newRow.insertCell(0).textContent = table.rows.length - 1;
       newRow.insertCell(1).textContent = nombre;
       newRow.insertCell(2).innerHTML = '<button onclick="eliminarFila(this)">Eliminar</button>';
       saveTableData();
       document.getElementById("captura").value="";
-}
-  function eliminarFila(button) {
-      button.parentNode.parentNode.remove();
+        }
+
+        function eliminarFila(button) {
+           
+            button.parentNode.parentNode.remove();
       saveTableData();
-  }
-  loadTableData();
-</script>
-  </body>
-  </html>
+        }
+
+        
+        window.onload = loadTableData;
+    </script>
+</body>
+</html>
