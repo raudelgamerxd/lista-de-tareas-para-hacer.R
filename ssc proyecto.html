@@ -22,9 +22,17 @@
         border: 1px solid black;
     }
 </style>
-
+<style>
+    body{
+        background-image:url(minecraft-world-scenery-desktop-wallpaper.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center
+        ;
+    }
+</style>
+</body>
 <body>
-
     <div style="display: flex; justify-content: center; align-items: center;">
         <table>
             <tr>
@@ -111,8 +119,12 @@
       saveTableData();
         }
 
-        
+        if(window.confirm('estas seguro de que deseas eliminar todos los datos locales de este sitio')){
+            localStorage.clear();
+            alert('datos eliminados correctamente');
+        }
         window.onload = loadTableData;
+
     </script>
 </body>
-</html>
+</html> 
