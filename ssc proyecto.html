@@ -1,42 +1,28 @@
-<!DOCTYPE html >
-<html lang="es">
- <head> 
-   <title> HTML </title> 
-</head>   
-
-<style type="text/css">
- table, tr, td {
-  border: 1px solid black;
-}
-
-</style> 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title> HTML </title>
+    <title>HTML</title>
+    <style type="text/css">
+        table, tr, td {
+            border: 1px solid black;
+        }
+        body {
+            background-image: url(minecraft-world-scenery-desktop-wallpaper.jpg);
+            background-size: cover;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
 </head>
 
-<style type="text/css">
-    table, tr, td {
-        border: 1px solid black;
-    }
-</style>
-<style>
-    body{
-        background-image:url(minecraft-world-scenery-desktop-wallpaper.jpg);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center
-        ;
-    }
-</style>
-</body>
 <body>
     <div style="display: flex; justify-content: center; align-items: center;">
         <table>
             <tr>
-                <td colspan="2" style="background-color: white"><h2>Elementos de HTML</h2></td>
+                <td colspan="2" style="background-color: white">
+                    <h2 class="center">LISTA DE COSAS</h2>
+                </td>
             </tr>
             <tr>
                 <td><input id="captura" type="text" placeholder="Escribe tu nombre"></td>
@@ -47,22 +33,29 @@
 
     <center>
         <table id="tabla">
-            <tr>
-                <td style="background-color: white">Elementos</td>
-                <td style="background-color: white">Descripción</td>
-            </tr>
-            <tr>
-                <td style="background-color: white">Prueba</td>
-                <td id="ejemplo" style="background-color: white">aquí ira otro texto.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <td style="background-color: rgb(40, 116, 151)">No.</td>
+                    <td style="background-color: rgb(40, 116, 151)">Nombre</td>
+                    <td style="background-color: rgb(40, 116, 151)">Acción</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se agregarán dinámicamente aquí -->
+            </tbody>
         </table>
+    </center>
+
+    <!-- Botón para eliminar todos los datos locales -->
+    <center>
+        <button onclick="eliminarDatosLocales()">Eliminar todos los datos</button>
     </center>
 
     <script>
         function saveTableData() {
             const tableData = [];
             const rows = document.getElementById("tabla").rows;
-            for (let i = 1; i < rows.length; i++) {
+            for (let i = 1; i < rows.length; i++) {  // Iniciar en 1 para omitir el encabezado
                 const row = rows[i];
                 const data = {
                     elemento: row.cells[0].textContent,
@@ -78,53 +71,61 @@
             if (savedData) {
                 const tableData = JSON.parse(savedData);
                 const tableBody = document.getElementById("tabla").querySelector('tbody'); 
-
-               
+                
+                // Limpiar la tabla antes de agregar las filas
                 tableBody.innerHTML = '';
 
-                
+                // Agregar las filas de los datos guardados
                 tableData.forEach(data => {
                     const newRow = tableBody.insertRow();
                     const cell1 = newRow.insertCell();
                     const cell2 = newRow.insertCell();
+                    const cell3 = newRow.insertCell();
                     cell1.textContent = data.elemento;
                     cell2.textContent = data.descripcion;
+                    cell3.innerHTML = '<button onclick="eliminarFila(this)">Eliminar</button>';
                 });
             }
         }
 
         function agregarFila() {
-            
             const nombre = document.getElementById("captura").value;
-      const nombreSinEspacios = nombre.trim();
+            const nombreSinEspacios = nombre.trim();
 
-   
-    if (nombreSinEspacios === "") {
-        
-        alert("Por favor, ingresa un valor válido.");
-        return;
-    }
-      const table = document.getElementById("tabla");
-      const newRow = table.insertRow(-1);
-      newRow.insertCell(0).textContent = table.rows.length - 1;
-      newRow.insertCell(1).textContent = nombre;
-      newRow.insertCell(2).innerHTML = '<button onclick="eliminarFila(this)">Eliminar</button>';
-      saveTableData();
-      document.getElementById("captura").value="";
+            if (nombreSinEspacios === "") {
+                alert("Por favor, ingresa un valor valido.");
+                return;
+            }
+
+            const table = document.getElementById("tabla");
+            const newRow = table.insertRow(-1);
+            const noCell = newRow.insertCell(0);
+            const nombreCell = newRow.insertCell(1);
+            const accionCell = newRow.insertCell(2);
+            
+            noCell.textContent = table.rows.length - 1; // Restar 2 para evitar contar el encabezado
+            nombreCell.textContent = nombre;
+            accionCell.innerHTML = '<button onclick="eliminarFila(this)">Eliminar</button>';
+
+            saveTableData();
+            document.getElementById("captura").value = ""; // Limpiar el input
         }
 
         function eliminarFila(button) {
-           
             button.parentNode.parentNode.remove();
-      saveTableData();
+            saveTableData();
         }
 
-        if(window.confirm('estas seguro de que deseas eliminar todos los datos locales de este sitio')){
-            localStorage.clear();
-            alert('datos eliminados correctamente');
+        function eliminarDatosLocales() {
+            if (window.confirm('¿Estás seguro de que deseas eliminar todos los datos locales de este sitio?')) {
+                localStorage.clear();
+                alert('Datos eliminados correctamente');
+                location.reload(); // Recargar la página para reflejar los cambios
+            }
         }
+
+        // Cargar los datos guardados al iniciar la página
         window.onload = loadTableData;
-
     </script>
 </body>
-</html> 
+</html>
